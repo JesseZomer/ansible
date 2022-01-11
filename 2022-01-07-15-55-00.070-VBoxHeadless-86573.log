@@ -1,0 +1,12 @@
+Log created: 2022-01-07T15:55:00.709051000Z
+Process ID:  86573 (0x1522d)
+Parent PID:  1858 (0x742)
+Executable:  /usr/lib/virtualbox/VBoxHeadless
+Arg[0]: /usr/lib/virtualbox/VBoxHeadless
+Arg[1]: --comment
+Arg[2]: ansible_default_1641546488942_29545
+Arg[3]: --startvm
+Arg[4]: 565fc8d8-c3b6-4886-82ee-8d88cd65f9ec
+Arg[5]: --vrde
+Arg[6]: config
+AddRef: illegal refcnt=3221225469 state=2
