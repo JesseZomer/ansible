@@ -13,6 +13,7 @@
       - gnome-shell-extension-gsconnect-browsers
       - htop
       - neovim
+      - snapd
       - vim
       - virtualbox
       - code
