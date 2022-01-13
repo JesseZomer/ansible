@@ -1,0 +1,30 @@
+- hosts: all
+  pre_tasks:
+    - name: updating packages
+      become: true
+      package: update_cache=yes
+
+  roles:
+    - { role: applications, become: true }
+    - { role: brave, become: true }
+    - role: gantsign.antigen
+      users:
+        - username: "{{ ansible_user_id }}"
+          antigen_libraries:
+            - name: oh-my-zsh
+          antigen_theme:
+            name: robbyrussell
+          antigen_bundles:
+            # Bundles from the default repo (robbyrussell's oh-my-zsh).
+            - name: git
+            - name: command-not-found
+            # Auto suggestions
+            - name: zsh-autosuggestions
+              url: zsh-users/zsh-autosuggestions
+            # Syntax highlighting bundle.
+            - name: zsh-syntax-highlighting
+              url: zsh-users/zsh-syntax-highlighting
+    - role: diodonfrost.p10k
+
+- name: configure gnome
+  import_playbook: gnome.yml

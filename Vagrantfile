@@ -15,7 +15,8 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ahplummer/PopOS_21.10"
   config.vm.guest = "ubuntu"
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "main.yml"
+    ansible.galaxy_role_file = 'requirements.yml'
   end
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs

@@ -1,0 +1,73 @@
+- hosts: all
+
+  pre_tasks:
+    - name: See if font is already installed
+      register: font_installed
+      stat:
+        path: "/home/{{ ansible_user_id }}/.local/share/fonts/Microsoft/TrueType/Segoe UI/segoeui.ttf"
+    - name: install segoe-ui font
+      get_url: url=https://raw.githubusercontent.com/mrbvrz/segoe-ui-linux/master/install.sh dest=/tmp/install.sh mode=755
+    - name: Execute the segoe-ui installer
+      shell: set -o pipefail yes | /tmp/install.sh
+      changed_when: false
+      when: not font_installed.stat.exists
+    - name: Remove the segoe-ui installer
+      file: path=/tmp/install.sh state=absent
+      when: not font_installed.stat.exists
+
+  roles:
+    - role: petermosmans.customize-gnome
+      vars:
+        gnome_extensions:
+          - id: 1160
+            enable: true
+          - id: 708
+            enable: true
+          - id: 906
+            enable: true
+        gnome_files:
+          - src: files/4k-pc-wallpaper.jpg
+            dest: "/home/{{ gnome_user }}/Downloads/4k-pc-wallpaper.jpg"
+        # gnome_dconf:
+        #   - key: /org/gnome/desktop/background/picture-uri
+        # value: "'file:///home/{{ gnome_user }}/Downloads/4k-pc-wallpaper.jpg'"
+        gnome_gsettings:
+          - schema: org.gnome.desktop.background
+            key: picture-uri
+            value: '"file:///home/{{ gnome_user }}/Downloads/4k-pc-wallpaper.jpg"'
+
+          - schema: org.gnome.desktop.interface
+            key: clock-format
+            value: '"24h"'
+
+          - schema: org.gnome.desktop.interface
+            key: clock-show-date
+            value: "true"
+
+          - schema: org.gnome.desktop.interface
+            key: clock-show-seconds
+            value: "false"
+
+          - schema: org.gnome.desktop.interface
+            key: clock-show-weekday
+            value: "false"
+
+          - schema: org.gnome.desktop.interface
+            key: document-font-name
+            value: "'Segoe UI 11'"
+
+          - schema: org.gnome.desktop.interface
+            key: font-name
+            value: "'Segoe UI 10'"
+
+          - schema: org.gnome.desktop.interface
+            key: monospace-font-name
+            value: "'Segoe UI 11'"
+
+          - schema: org.gnome.desktop.wm.preferences
+            key: titlebar-font
+            value: "'Segoe UI 10'"
+
+          - schema: org.gnome.desktop.interface
+            key: enable-animations
+            value: "false"

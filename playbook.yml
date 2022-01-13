@@ -1,8 +1,0 @@
-- hosts: all
-  pre_tasks:
-    - name: updating packages
-      become: true
-      package: update_cache=yes
-
-  roles:
-    - { role: applications, become: true }

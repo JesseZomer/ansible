@@ -14,6 +14,7 @@
       - htop
       - neovim
       - snapd
+      - stow
       - vim
       - virtualbox
       - code
