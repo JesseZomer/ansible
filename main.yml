@@ -28,3 +28,9 @@
 
 - name: configure gnome
   import_playbook: gnome.yml
+
+- name: install ssh keys
+  import_playbook: ssh.yml
+
+- name: dotfiles
+  import_playbook: dotfiles.yml
