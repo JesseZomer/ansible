@@ -4,7 +4,7 @@
     - name: Ensure .ssh directory exists.
       become: true
       file:
-        dest: "/home/{{ ansible_user_id }}/.ssh"
+        dest: "/home/{{ lookup('env', 'USER') }}/.ssh"
         mode: 0700
         state: directory
 
