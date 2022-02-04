@@ -1,0 +1,25 @@
+- hosts: all
+  pre_tasks:
+    - name: updating packages
+      become: true
+      package: update_cache=yes
+
+  roles:
+    - role: geerlingguy.nodejs
+      become: true
+      nodejs_version: "16.x"
+      nodejs_npm_global_packages:
+        - name: "@angular/cli"
+        - name: npm-check
+    - role: mongodb
+      version: 5.0
+
+  tasks:
+    - name: checkout docent repo
+      ansible.builtin.git:
+        repo: "git@github.com:topicusonderwijs/docenttoday.git"
+        dest: /home/{{ ansible_user_id }}/dev/docenttoday
+        key_file: /home/{{ ansible_user_id }}/.ssh/id_ed25519
+        accept_hostkey: true
+        update: true
+        version: PRE

@@ -8,6 +8,7 @@
     - { role: applications, become: true }
     - { role: brave, become: true }
     - role: gantsign.antigen
+      antigen_install_oh_my_zsh: true
       users:
         - username: "{{ ansible_user_id }}"
           antigen_libraries:
@@ -31,6 +32,13 @@
 
 - name: install ssh keys
   import_playbook: ssh.yml
+  vars:
+    source_key: "files/id_ed25519"
+    dest_key: "{{ lookup('env', 'HOME') }}/.ssh/id_ed25519"
+    ssh_pass: "{{ lookup('file', 'files/ssh-key') }}"
 
 - name: dotfiles
   import_playbook: dotfiles.yml
+
+- name: setup docent
+  import_playbook: docent.yml

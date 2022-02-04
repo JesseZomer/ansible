@@ -36,10 +36,11 @@ Vagrant.configure("2") do |config|
   SHELL
 
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "gnome.yml"
+    ansible.playbook = "main.yml"
     ansible.galaxy_role_file = 'requirements.yml'
     ansible.vault_password_file = "/tmp/vault_pass"
   end
+  config.ssh.forward_agent = true
 
   # Delete temp vault password file
   config.vm.provision "shell", inline: <<-SHELL

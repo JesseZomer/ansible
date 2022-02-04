@@ -4,6 +4,10 @@
       become: true
       package: update_cache=yes
 
+    - name: verify github host key
+      shell: "ssh-keyscan -H github.com >> ~/.ssh/known_hosts"
+      changed_when: false
+
   tasks:
     - name: Install stow and git
       become: true
@@ -13,12 +17,26 @@
           - stow
           - git
 
-    - name: checkout dotfiles repo
-      ansible.builtin.git:
-        repo: "git@github.com:JesseZomer/dotfiles.git"
-        dest: /home/{{ ansible_user_id }}
-        version: "HEAD"
+    # - name: checkout dotfiles repo
+    #   ansible.builtin.git:
+    #     repo: "git@github.com:JesseZomer/dotfiles.git"
+    #     dest: /home/{{ ansible_user_id }}/dotfiles
+    #     accept_hostkey: true
+    #     update: true
+    #     version: master
+
+    - name: remove bashrc
+      file:
+        state: absent
+        path: /home/{{ ansible_user_id }}/.bashrc
+
+    - name: remove zshrc
+      file:
+        state: absent
+        path: /home/{{ ansible_user_id }}/.zshrc
 
     - name: "stow dotfiles"
       shell: stow -d ~/dotfiles *
+      args:
+        chdir: /home/{{ ansible_user_id }}/dotfiles
       changed_when: false

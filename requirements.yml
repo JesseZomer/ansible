@@ -1,3 +1,4 @@
 - src: gantsign.antigen
 - src: diodonfrost.p10k
 - src: petermosmans.customize-gnome
+- src: geerlingguy.nodejs

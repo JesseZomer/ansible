@@ -1,38 +1,25 @@
 - hosts: all
 
-  # pre_tasks:
-  #   - name: See if font is already installed
-  #     register: font_installed
-  #     become: true
-  #     stat:
-  #       path: "/home/{{ lookup('env', 'USER') }}/.local/share/fonts/Microsoft/TrueType/Segoe UI/segoeui.ttf"
-  #   - name: create font dest dir
-  #     become: true
-  #     file:
-  #       path: "/home/{{ lookup('env', 'USER') }}/.local/share/fonts/Microsoft/TrueType/Segoe UI/"
-  #       state: directory
-  #       mode: u=rw,g=r,o=r
-  #       owner: "{{ lookup('env', 'USER') }}"
-  #       group: "{{ lookup('env', 'USER') }}"
-  #       recurse: true
-  #   - name: Execute the segoe-ui installer
-  #     become: true
-  #     shell: |
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/segoeui.ttf?raw=true -O {{ dest_dir }}/segoeui.ttf > /dev/null 2>&1 # regular
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/segoeuib.ttf?raw=true -O {{ dest_dir }}/segoeuib.ttf > /dev/null 2>&1 # bold
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/segoeuii.ttf?raw=true -O {{ dest_dir }}/segoeuii.ttf > /dev/null 2>&1 # italic
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/segoeuiz.ttf?raw=true -O {{ dest_dir }}/segoeuiz.ttf > /dev/null 2>&1 # bold italic
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/segoeuil.ttf?raw=true -O {{ dest_dir }}/segoeuil.ttf > /dev/null 2>&1 # light
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/seguili.ttf?raw=true -O {{ dest_dir }}/seguili.ttf > /dev/null 2>&1 # light italic
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/segoeuisl.ttf?raw=true -O {{ dest_dir }}/segoeuisl.ttf > /dev/null 2>&1 # semilight
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/seguisli.ttf?raw=true -O {{ dest_dir }}/seguisli.ttf > /dev/null 2>&1 # semilight italic
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/seguisb.ttf?raw=true -O {{ dest_dir }}/seguisb.ttf > /dev/null 2>&1 # semibold
-  #       wget -q https://github.com/mrbvrz/segoe-ui/raw/master/font/seguisbi.ttf?raw=true -O {{ dest_dir }}/seguisbi.ttf > /dev/null 2>&1 # semibold italic
-  #       fc-cache -f {{ dest_dir }}
-  #     vars:
-  #       dest_dir: "/home/{{ lookup('env', 'USER') }}/.local/share/fonts/Microsoft/TrueType/Segoe UI/"
-  #     changed_when: false
-  #     when: not font_installed.stat.exists
+  pre_tasks:
+    - name: See if font is already installed
+      register: font_installed
+      become: true
+      stat:
+        path: "/home/{{ lookup('env', 'USER') }}/.local/share/fonts/Microsoft/TrueType/Segoe UI/segoeui.ttf"
+
+    - name: download segoe-ui font install script
+      get_url: url=https://raw.githubusercontent.com/mrbvrz/segoe-ui-linux/master/install.sh dest=/tmp/install.sh mode=755
+      when: not font_installed.stat.exists
+
+    - name: Execute the script
+      shell:
+        cmd: yes | /tmp/install.sh
+      changed_when: false
+      when: not font_installed.stat.exists
+
+    - name: Remove the segoe-ui installer
+      file: path=/tmp/install.sh state=absent
+      when: not font_installed.stat.exists
 
   roles:
     - role: petermosmans.customize-gnome

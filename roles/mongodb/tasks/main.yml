@@ -1,0 +1,35 @@
+---
+- name: Install aptitude using apt
+  become: true
+  apt:
+    name: aptitude
+    state: present
+    update_cache: true
+
+- name: Import public key
+  become: true
+  apt_key:
+    url: "https://www.mongodb.org/static/pgp/server-{{ version }}.asc"
+    state: present
+
+- name: Add repository
+  become: true
+  apt_repository:
+    filename: "/etc/apt/sources.list.d/mongodb-org-{{ version }}.list"
+    repo: "deb https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/{{ version }} multiverse"
+    state: present
+    update_cache: true
+
+- name: Install mongoDB
+  become: true
+  apt:
+    name: mongodb-org
+    state: present
+    update_cache: true
+
+- name: Ensure mongodb is running and and enabled to start automatically on reboots
+  become: true
+  service:
+    name: mongod
+    enabled: true
+    state: started

@@ -5,7 +5,9 @@
     state: present
     name:
       - alacritty
+      - bat
       - discord
+      - exa
       - evolution
       - evolution-ews
       - gnome-tweaks
@@ -13,6 +15,7 @@
       - gnome-shell-extension-gsconnect-browsers
       - htop
       - neovim
+      - python3-pip
       - snapd
       - stow
       - vim
@@ -21,6 +24,13 @@
       - zsh
       - git
       - tmux
+      - tmuxinator
+      - zsh-antigen
+
+- name: install pexpect
+  pip:
+    name: pexpect
+  become: true
 
 - name: Install dropbox
   apt:
