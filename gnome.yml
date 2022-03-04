@@ -58,22 +58,6 @@
             key: clock-show-weekday
             value: "false"
 
-          # - schema: org.gnome.desktop.interface
-          #   key: document-font-name
-          #   value: "'Segoe UI 11'"
-
-          # - schema: org.gnome.desktop.interface
-          #   key: font-name
-          #   value: "'Segoe UI 10'"
-
-          # - schema: org.gnome.desktop.interface
-          #   key: monospace-font-name
-          #   value: "'Segoe UI 11'"
-
-          # - schema: org.gnome.desktop.wm.preferences
-          #   key: titlebar-font
-          #   value: "'Segoe UI 10'"
-
           - schema: org.gnome.desktop.interface
             key: enable-animations
             value: "false"

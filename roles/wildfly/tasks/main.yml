@@ -1,0 +1,58 @@
+---
+- name: Wildfly zip uitpakken
+  ansible.builtin.unarchive:
+    src: files/wildfly-{{ versie }}.zip
+    dest: "/tmp"
+    creates: "/tmp/wildfly-{{ versie }}.0.0.Final"
+
+- name: Copy unzipped wildfly naar normale wildfly map
+  ansible.builtin.copy:
+    src: "/tmp/wildfly-{{ versie }}.0.0.Final/"
+    dest: "{{ lookup('env', 'HOME') }}/dev/wildfly/wildfly-{{ versie }}"
+    remote_src: true
+    directory_mode: true
+
+- name: Copy unzipped wildfly naar util wildfly map
+  ansible.builtin.copy:
+    src: "/tmp/wildfly-{{ versie }}.0.0.Final/"
+    dest: "{{ lookup('env', 'HOME') }}/dev/wildfly/wildfly-{{ versie }}-util"
+    remote_src: true
+    directory_mode: true
+
+- name: Copy unzipped wildfly naar regressie wildfly map
+  ansible.builtin.copy:
+    src: "/tmp/wildfly-{{ versie }}.0.0.Final/"
+    dest: "{{ lookup('env', 'HOME') }}/dev/wildfly/wildfly-{{ versie }}-regressie"
+    remote_src: true
+    directory_mode: true
+
+- name: Multitenant regel toevoegen
+  ansible.builtin.lineinfile:
+    path: "{{ lookup('env', 'HOME') }}/dev/wildfly-{{ versie }}/standalone/configuration/standalone.xml"
+    insertbefore: '<property name="hibernate.types.print.banner" value="false"/>'
+    line: '<property name="iridium/enable.multitenant" value="true"/>'
+    state: present
+
+- name: Duointercepter regel uitzetten
+  ansible.builtin.lineinfile:
+    path: "{{ lookup('env', 'HOME') }}/dev/wildfly-{{ versie }}/standalone/configuration/standalone.xml"
+    insertafter: '<bindings>'
+    line: '<simple name="java:/iridium/DuoWijzigingInterceptor" value="false"/>'
+    state: present
+
+- name: Copy standalones naar util
+  ansible.builtin.copy:
+    src: "{{ lookup('env', 'HOME') }}/dev/wildfly-{{ versie }}/standalone/configuration/standalone.xml"
+    dest: "{{ lookup('env', 'HOME') }}/dev/wildfly-{{ versie }}-util/standalone/configuration/standalone.xml"
+    remote_src: yes
+
+- name: Copy standalone naar regressie
+  ansible.builtin.copy:
+    src: "{{ lookup('env', 'HOME') }}/dev/wildfly-{{ versie }}/standalone/configuration/standalone.xml"
+    dest: "{{ lookup('env', 'HOME') }}/dev/wildfly-{{ versie }}-util/standalone/configuration/standalone.xml"
+    remote_src: yes
+
+- name: remove tmp unzip map
+  file: path=/tmp/wildfly-{{ versie }}.0.0.Final state=absent
+
+

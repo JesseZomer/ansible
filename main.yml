@@ -7,25 +7,6 @@
   roles:
     - { role: applications, become: true }
     - { role: brave, become: true }
-    - role: gantsign.antigen
-      antigen_install_oh_my_zsh: true
-      users:
-        - username: "{{ ansible_user_id }}"
-          antigen_libraries:
-            - name: oh-my-zsh
-          antigen_theme:
-            name: robbyrussell
-          antigen_bundles:
-            # Bundles from the default repo (robbyrussell's oh-my-zsh).
-            - name: git
-            - name: command-not-found
-            # Auto suggestions
-            - name: zsh-autosuggestions
-              url: zsh-users/zsh-autosuggestions
-            # Syntax highlighting bundle.
-            - name: zsh-syntax-highlighting
-              url: zsh-users/zsh-syntax-highlighting
-    - role: diodonfrost.p10k
 
 - name: configure gnome
   import_playbook: gnome.yml
@@ -42,3 +23,6 @@
 
 - name: setup docent
   import_playbook: docent.yml
+
+- name: setup iridium
+  import_playbook: iridium.yml

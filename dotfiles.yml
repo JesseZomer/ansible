@@ -17,13 +17,13 @@
           - stow
           - git
 
-    # - name: checkout dotfiles repo
-    #   ansible.builtin.git:
-    #     repo: "git@github.com:JesseZomer/dotfiles.git"
-    #     dest: /home/{{ ansible_user_id }}/dotfiles
-    #     accept_hostkey: true
-    #     update: true
-    #     version: master
+    - name: checkout dotfiles repo
+      ansible.builtin.git:
+        repo: "git@github.com:JesseZomer/dotfiles.git"
+        dest: /home/{{ ansible_user_id }}/dotfiles
+        accept_hostkey: true
+        update: true
+        version: master
 
     - name: remove bashrc
       file:

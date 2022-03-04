@@ -15,6 +15,15 @@ Vagrant.configure("2") do |config|
   config.vm.box = "ahplummer/PopOS_21.10"
   config.vm.guest = "ubuntu"
 
+  config.vm.provider "virtualbox" do |v|
+    v.memory = 8192
+    v.cpus = 4
+        # Set the video memory to 128Mb:
+    v.customize ["modifyvm", :id, "--vram", "128"]
+    # Enable 3D acceleration:
+    v.customize ["modifyvm", :id, "--accelerate3d", "on"]
+  end
+
     # Password Input Function
   class Password
     def to_s
